@@ -1,0 +1,22 @@
+ARG BASE_IMAGE=ubuntu:22.04
+FROM ${BASE_IMAGE}
+
+ARG AGILEX_GIT_URL=https://github.com/agilexrobotics/ugv_sdk
+ARG AGILEX_HUNTER_GIT_URL=https://github.com/agilexrobotics/hunter_ros2
+
+# Download Fixposition GPS driver
+RUN cd src && git clone ${AGILEX_GIT_URL} \
+    && git clone ${AGILEX_HUNTER_GIT_URL}
+
+# Setup Fixposition GPS driver
+# TODO: This might need to be done outside
+RUN modprobe gs_usb
+WORKDIR /workspace/src/ugv_sdk/scripts
+RUN ugv_sdk/scripts/setup_can2usb.bash \
+    && ugv_sdk/scripts/bringup_can2usb_500k.bash
+
+# Install Fixposition GPS drivier
+WORKDIR /workspace
+RUN source /opt/ros/humble/setup.bash \
+    && colcon build --symlink-install --packages-up-to hunter_base
+

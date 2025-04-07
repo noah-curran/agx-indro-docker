@@ -1,0 +1,46 @@
+ARG BASE_IMAGE=ubuntu:22.04
+FROM ${BASE_IMAGE}
+
+ARG FP_GPS_VERSION=8.0.0
+ARG FP_GIT_URL=https://github.com/fixposition/fixposition_driver
+
+# Download Fixposition GPS driver
+RUN cd src && git clone -b ${FP_GPS_VERSION} ${FP_GIT_URL}
+
+RUN apt-get update && apt-get install -y \
+    libyaml-cpp-dev \
+    libboost-all-dev \
+    zlib1g-dev \
+    libeigen3-dev \
+    linux-libc-dev
+
+# Install gtest
+RUN curl -L https://github.com/google/googletest/archive/refs/tags/v1.13.0.tar.gz -o /tmp/gtest.tar.gz
+RUN mkdir /tmp/gtest
+WORKDIR /tmp/gtest
+RUN tar --strip-components=1 -xzvf ../gtest.tar.gz \
+    && cmake -B build -S . \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr/local \
+    -DBUILD_SHARED_LIBS=ON \
+    && cmake --build build --parallel 4 \
+    && cmake --install build \
+    && rm -rf /tmp/gtest.tar.gz /tmp/gtest
+
+# Install Fixposition GPS driver
+WORKDIR /workspace/src/fixposition_driver
+RUN source /opt/ros/humble/setup.bash \
+    && git submodule update --init \
+# This doesn't work in the Dockerfile, so we do what it effectively does below.
+#    && source setup_ros_ws.sh -s \
+    && touch fixposition_driver_ros1/COLCON_IGNORE \
+    && touch fixposition-sdk/fpsdk_ros1/COLCON_IGNORE \
+    && touch fixposition-sdk/examples/COLCON_IGNORE \
+    && rm -f fixposition-sdk/CMakeLists.txt
+
+ARG MAKEFLAGS="-j6"
+ENV MAKEFLAGS=${MAKEFLAGS}
+WORKDIR /workspace
+RUN source /opt/ros/humble/setup.bash \
+    && colcon build --symlink-install --packages-up-to fixposition_driver_ros2
+
