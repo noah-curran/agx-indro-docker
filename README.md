@@ -1,7 +1,7 @@
 # Installation
 First, make sure you have [Isaac ROS](https://nvidia-isaac-ros.github.io/getting_started/dev_env_setup.html) setup with your workspace. We build the Dockerfiles here based on Isaac ROS's layered docker build process.
 
-You also want to make sure that the `gs\_usb` header is available. You can use the provided script `setup-jetson-can.sh`. It will give you a menu at some point and you need to follow `Networking support → CAN bus subsystem support → CAN Device Drivers → CAN USB interfaces → Geschwister Schneider UG (gs_usb)`. Then, press M, save, and exit.
+You also want to make sure that the `gs_usb` header is available. You can use the provided script `setup-jetson-can.sh`. It will give you a menu at some point and you need to follow `Networking support → CAN bus subsystem support → CAN Device Drivers → CAN USB interfaces → Geschwister Schneider UG (gs_usb)`. Then, press M, save, and exit.
 
 Finally you can copy and run the docker.
 ```bash
