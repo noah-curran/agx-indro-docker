@@ -1,5 +1,7 @@
 # !/bin/bash
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 # Download kernel sources which match this version. For Jetpack 6.0 this is r363
 cd /tmp/
 wget https://developer.nvidia.com/downloads/embedded/l4t/r36_release_v3.0/sources/public_sources.tbz2
@@ -28,6 +30,8 @@ make M=drivers/net/can/usb -j4
 find . -name "gs_usb.ko" # Probably at drivers/net/can/usb/gs_usb.ko
 sudo mkdir -p /lib/modules/$(uname -r)/kernel/drivers/net/can/usb/
 sudo cp drivers/net/can/usb/gs_usb.ko /lib/modules/$(uname -r)/kernel/drivers/net/can/usb
+sudo cp divers/net/can/usb/gs_usb.ko ${SCRIPT_DIR}
+
 sudo depmod -a
 
 # Load gs_usb

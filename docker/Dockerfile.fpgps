@@ -4,9 +4,6 @@ FROM ${BASE_IMAGE}
 ARG FP_GPS_VERSION=8.0.0
 ARG FP_GIT_URL=https://github.com/fixposition/fixposition_driver
 
-# Download Fixposition GPS driver
-RUN cd src && git clone -b ${FP_GPS_VERSION} ${FP_GIT_URL}
-
 RUN apt-get update && apt-get install -y \
     libyaml-cpp-dev \
     libboost-all-dev \
@@ -15,10 +12,11 @@ RUN apt-get update && apt-get install -y \
     linux-libc-dev
 
 # Install gtest
-RUN curl -L https://github.com/google/googletest/archive/refs/tags/v1.13.0.tar.gz -o /tmp/gtest.tar.gz
-RUN mkdir /tmp/gtest
-WORKDIR /tmp/gtest
-RUN tar --strip-components=1 -xzvf ../gtest.tar.gz \
+RUN curl -L https://github.com/google/googletest/archive/refs/tags/v1.13.0.tar.gz \
+    -o /tmp/gtest.tar.gz \
+    && mkdir /tmp/gtest \
+    && cd /tmp/gtest \
+    && tar --strip-components=1 -xzvf ../gtest.tar.gz \
     && cmake -B build -S . \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr/local \
@@ -28,8 +26,10 @@ RUN tar --strip-components=1 -xzvf ../gtest.tar.gz \
     && rm -rf /tmp/gtest.tar.gz /tmp/gtest
 
 # Install Fixposition GPS driver
-WORKDIR /workspace/src/fixposition_driver
-RUN source /opt/ros/humble/setup.bash \
+WORKDIR /workspaces/src
+RUN git clone -b ${FP_GPS_VERSION} ${FP_GIT_URL} \
+    && source /opt/ros/humble/setup.bash \
+    && cd fixposition_driver \
     && git submodule update --init \
 # This doesn't work in the Dockerfile, so we do what it effectively does below.
 #    && source setup_ros_ws.sh -s \
@@ -40,7 +40,7 @@ RUN source /opt/ros/humble/setup.bash \
 
 ARG MAKEFLAGS="-j6"
 ENV MAKEFLAGS=${MAKEFLAGS}
-WORKDIR /workspace
+WORKDIR /workspaces
 RUN source /opt/ros/humble/setup.bash \
     && colcon build --symlink-install --packages-up-to fixposition_driver_ros2
 
