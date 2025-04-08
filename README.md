@@ -11,3 +11,13 @@ git clone https://github.com/noah-curran/agx-indro-docker.git
 cp agx-indro-docker/.isaac_ros_common-config src/isaac_ros_config/scripts/
 cd src/isaac_ros_common && ./scripts/run_dev.sh -d ${ISAAC_ROS_WS}
 ```
+
+If more custom layers are added and the Docker max layer depth is reached (usually after 127 layers you get this error: `Error response from daemon: max depth exceeded`) then you can increase the default limit for this. Please try anything possible to reduce the number of layers (i.e., by combining `RUN` commands or reducing `COPY` or `ADD` commands), so use this as a last resort effort.
+
+1. `Edit /etc/docker/daemon.json`:
+```json
+{
+  "max-container-image-layers": # number you want here
+}
+```
+2. Restart Docker: `sudo systemctl restart docker`
