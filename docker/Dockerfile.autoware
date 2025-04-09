@@ -25,11 +25,9 @@ RUN --mount=type=cache,target=/var/cache/apt \
     unzip \
     vim \
     wget \
-    zlib1g-dev
+    zlib1g-dev \
 
 # Core dev libraries
-RUN --mount=type=cache,target=/var/cache/apt \
-    apt-get update && apt-get install -y \
     gfortran \
     graphicsmagick-libmagick-dev-compat \
     jq \
@@ -82,17 +80,14 @@ RUN --mount=type=cache,target=/var/cache/apt \
 RUN rm -rf /usr/include/boost \
     && rm -rf /usr/lib/libboost_* \
     && rm -rf /usr/lib/cmake/Boost* \
-    && rm -rf /usr/lib/pkgconfig/boost*
-
+    && rm -rf /usr/lib/pkgconfig/boost* \
 # Install Boost v1.74.0
-RUN --mount=type=cache,target=var/cache/apt \
-    wget -O /tmp/boost.tar.gz \
+    && wget -O /tmp/boost.tar.gz \
     https://archives.boost.io/release/1.74.0/source/boost_1_74_0.tar.gz \
     && (cd /tmp && tar xzf boost.tar.gz) \
     && cd /tmp/boost_1_74_0 \
-    && ./bootstrap.sh --prefix=/usr
-RUN --mount=type=cache,target=var/cache/apt \
-    cd /tmp/boost_1_74_0 \
+    && ./bootstrap.sh --prefix=/usr \
+    && cd /tmp/boost_1_74_0 \
     && ./b2 -q -d0 install --without-python \
     && rm -rf /tmp/boost*
 
@@ -100,21 +95,17 @@ ARG AUTOWARE_SOURCE_VERSION=0.43.0
 ARG AUTOWARE_GIT_URL=https://github.com/autowarefoundation/autoware
 
 # Setup Autoware Install
-RUN git clone --depth 1 -b ${AUTOWARE_SOURCE_VERSION} ${AUTOWARE_GIT_URL}
-RUN --mount=type=cache,target=/var/cache/apt \
-    cd autoware/ansible/playbooks \
+WORKDIR /workspaces/isaac_ros-dev/src
+RUN git clone --depth 1 -b ${AUTOWARE_SOURCE_VERSION} ${AUTOWARE_GIT_URL} \
+    && cd autoware/ansible/playbooks \
     # && grep -v " - role: autoware.dev_env.agnocast " universe.yaml > universe.yaml.temp \
     # && mv universe.yaml.temp universe.yaml \
     && sed -i "/agnocast/d" universe.yaml \
     && sed -i "/dev_env.artifacts/d" universe.yaml \
     && sed -i "/download_artifacts/d" universe.yaml \
-    && cd ../.. && ./setup-dev-env.sh --no-nvidia --no-cuda-drivers -y
-RUN --mount=type=cache,target=/var/cache/apt \
-    cd autoware \
+    && cd ../.. && ./setup-dev-env.sh --no-nvidia --no-cuda-drivers -y \
     && mkdir src \
-    && vcs import src < autoware.repos
-
-RUN cd autoware \
+    && vcs import src < autoware.repos \
     && source /opt/ros/humble/setup.bash \
     && rosdep update \
     && rosdep install -y --from-paths src --ignore-src --rosdistro humble
@@ -132,4 +123,3 @@ RUN --mount=type=cache,target=/var/cache/apt \
     --continue-on-error \
     --executor parallel \
     --parallel-workers 4
-

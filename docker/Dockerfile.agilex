@@ -8,7 +8,7 @@ RUN mkdir -p /lib/modules/$(uname -r)/kernel/drivers/net/can/usb/
 COPY gs_usb.ko /lib/modules/5.15.136-tegra/kernel/drivers/net/can/usb/
 
 # Download Fixposition GPS driver and init
-RUN cd /workspaces/src && git clone ${AGILEX_GIT_URL} \
+RUN cd /workspaces/isaac_ros-dev/src && git clone ${AGILEX_GIT_URL} \
     && git clone ${AGILEX_HUNTER_GIT_URL} \
 #    && modprobe gs_usb \
     && depmod -a \
@@ -24,7 +24,7 @@ RUN cd /workspaces/src && git clone ${AGILEX_GIT_URL} \
 #     && ugv_sdk/scripts/bringup_can2usb_500k.bash
 
 # Install Fixposition GPS drivier
-WORKDIR /workspaces
+WORKDIR /workspaces/isaac_ros-dev
 RUN source /opt/ros/humble/setup.bash \
     && colcon build --symlink-install --packages-up-to hunter_base
 

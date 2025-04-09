@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     libpcap-dev
 
 # Setup RoboSense LiDAR Install
-WORKDIR /workspaces/src
+WORKDIR /workspaces/isaac_ros-dev/src
 RUN git clone ${RSLIDAR_GIT_URL} \
     && git clone ${RSLIDAR_MSG_GIT_URL} \
     && cd rslidar_sdk \
@@ -19,7 +19,7 @@ RUN git clone ${RSLIDAR_GIT_URL} \
 # Install RoboSense LiDAR Driver
 ARG MAKEFLAGS="-j6"
 ENV MAKEFLAGS=${MAKEFLAGS}
-WORKDIR /workspaces
+WORKDIR /workspaces/isaac_ros-dev
 RUN source /opt/ros/humble/setup.bash \
     && rosdep update \
     && rosdep install -y --from-paths src --ignore-src --rosdistro humble \

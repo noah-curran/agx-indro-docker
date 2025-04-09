@@ -26,7 +26,7 @@ RUN curl -L https://github.com/google/googletest/archive/refs/tags/v1.13.0.tar.g
     && rm -rf /tmp/gtest.tar.gz /tmp/gtest
 
 # Install Fixposition GPS driver
-WORKDIR /workspaces/src
+WORKDIR /workspaces/isaac_ros-dev/src
 RUN git clone -b ${FP_GPS_VERSION} ${FP_GIT_URL} \
     && source /opt/ros/humble/setup.bash \
     && cd fixposition_driver \
@@ -40,7 +40,7 @@ RUN git clone -b ${FP_GPS_VERSION} ${FP_GIT_URL} \
 
 ARG MAKEFLAGS="-j6"
 ENV MAKEFLAGS=${MAKEFLAGS}
-WORKDIR /workspaces
+WORKDIR /workspaces/isaac_ros-dev
 RUN source /opt/ros/humble/setup.bash \
     && colcon build --symlink-install --packages-up-to fixposition_driver_ros2
 
