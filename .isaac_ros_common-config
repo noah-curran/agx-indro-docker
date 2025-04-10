@@ -1,3 +1,3 @@
 CONFIG_IMAGE_KEY=ros2_humble.realsense_nogpu.autoware.rslidar.fpgps.agilex
-CONFIG_DOCKER_SEARCH_DIRS=(${ISAAC_ROS_WS}/src/isaac_ros_common/docker ${ISAAC_ROS_WS}/agx-indro-docker/docker)
+CONFIG_DOCKER_SEARCH_DIRS=(${SCRIPT_ROOT}/../docker ${ISAAC_ROS_WS}/agx-indro-docker/docker)
 CONFIG_CONTAINER_NAME_SUFFIX=agilex_commander
