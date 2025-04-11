@@ -1,0 +1,8 @@
+ARG BASE_IMAGE=ubuntu:22.04
+FROM ${BASE_IMAGE}
+
+RUN mkdir -p /opt/workspaces/isaac_ros-dev \
+    && mv /workspaces/isaac_ros-dev /opt/workspaces
+
+COPY scripts/copy-build.sh /usr/local/bin/scripts/entrypoint_additions/copy-build.sh
+

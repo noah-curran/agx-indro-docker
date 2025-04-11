@@ -21,7 +21,7 @@ ARG MAKEFLAGS="-j6"
 ENV MAKEFLAGS=${MAKEFLAGS}
 WORKDIR /workspaces/isaac_ros-dev
 RUN source /opt/ros/humble/setup.bash \
-    && rosdep update \
-    && rosdep install -y --from-paths src --ignore-src --rosdistro humble \
+#    && rosdep update \
+#    && rosdep install -y --from-paths src --ignore-src --rosdistro humble \
     && colcon build --symlink-install --packages-up-to rslidar_sdk
 
