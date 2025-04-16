@@ -12,14 +12,14 @@ cd ${ISAAC_ROS_WS}
 git clone https://github.com/noah-curran/agx-indro-docker.git
 ```
 
-**_ONLY DO THIS IF YOU ARE USING A VERSION OF JETPACK THAT IS NOT 6.0._** You also want to make sure that the correct `gs_usb` header is available. You can use the provided script `setup-jetson-can.sh`. It will give you a menu at some point and you need to follow `Networking support → CAN bus subsystem support → CAN Device Drivers → CAN USB interfaces → Geschwister Schneider UG (gs_usb)`. Then, press M, save, and exit. There is a version of `gs_usb.ko` in `docker/` that works for the Isaac ROS image we used, but if the version of the Jetson header files changes then you will need to change the version in `setup-jetson-can.sh` and follow the process to copy a new version of `gs_usb.ko` to `docker/`.
+**_ONLY DO THIS IF YOU ARE USING A VERSION OF JETPACK THAT IS NOT 6.0 or 6.1._** You also want to make sure that the correct `gs_usb` header is available. You can use the provided script `setup-jetson-can.sh`. It will give you a menu at some point and you need to follow `Networking support → CAN bus subsystem support → CAN Device Drivers → CAN USB interfaces → Geschwister Schneider UG (gs_usb)`. Then, press M, save, and exit. There is a version of `gs_usb.ko` in `docker/` that works for the Isaac ROS image we used, but if the version of the Jetson header files changes then you will need to change the version in `setup-jetson-can.sh` and follow the process to copy a new version of `gs_usb.ko` to `docker/`.
 
-Next, copy `gs_usb.ko` locally.
+Next, copy `gs_usb.ko` locally. Make sure you use the correct version number.
 ```bash
 # If you have a different version from 5.15.136-tegra then you will need to follow instructions above for rebuilding gs_usb.ko.
 # If you do this, consider creating a different branch and committing it to GitHub so we can keep different versions tagged.
 sudo mkdir -r /lib/modules/5.15.136-tegra/kernel/drivers/net/can/usb
-sudo cp ${ISAAC_ROS_WS}/agx-indro-docker/docker/gs_usb.ko /lib/modules/5.15.136-tegra/kernel/drivers/net/can/usb
+sudo cp ${ISAAC_ROS_WS}/agx-indro-docker/docker/gs_usb.ko.<version_number> /lib/modules/5.15.136-tegra/kernel/drivers/net/can/usb/gs_usb.ko
 sudo depmod -a
 sudo modprobe gs_usb
 ```
