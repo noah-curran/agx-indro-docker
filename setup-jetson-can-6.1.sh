@@ -4,17 +4,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Download kernel sources which match this version. For Jetpack 6.0 this is r363
 cd /tmp/
-VERSION=(uname -r)
-if [$(uname -r) == "5.15.136-tegra"]
-then
-	wget https://developer.nvidia.com/downloads/embedded/l4t/r36_release_v3.0/sources/public_sources.tbz2
-elif [$(uname -r) == "5.15.148-tegra"]
-then
-	wget https://developer.nvidia.com/downloads/embedded/l4t/r36_release_v4.0/sources/public_sources.tbz2
-else
-	echo "No version for ${VERSION}"
-	exit 1
-fi
+wget https://developer.nvidia.com/downloads/embedded/l4t/r36_release_v4.0/sources/public_sources.tbz2
 
 # Extract sources
 tar -xvf public_sources.tbz2

@@ -5,7 +5,7 @@ ARG AGILEX_GIT_URL=https://github.com/agilexrobotics/ugv_sdk
 ARG AGILEX_HUNTER_GIT_URL=https://github.com/agilexrobotics/hunter_ros2
 
 RUN mkdir -p /lib/modules/$(uname -r)/kernel/drivers/net/can/usb/
-COPY gs_usb.ko /lib/modules/5.15.136-tegra/kernel/drivers/net/can/usb/
+COPY gs_usb.ko.6.1 /lib/modules/5.15.136-tegra/kernel/drivers/net/can/usb/gs_usb.ko
 
 # Download AgileX control driver and init
 RUN cd /workspaces/isaac_ros-dev/src && git clone ${AGILEX_GIT_URL} \
