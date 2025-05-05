@@ -16,9 +16,9 @@ git clone https://github.com/noah-curran/agx-indro-docker.git
 
 Next, copy `gs_usb.ko` locally. Make sure you use the correct version number.
 ```bash
-# If you have a different version from 5.15.136-tegra then you will need to follow instructions above for rebuilding gs_usb.ko.
+# If you have a different version from the tegra versions for Jetpack 6.0 and 6.1 then you will need to follow instructions above for rebuilding gs_usb.ko.
 # If you do this, consider creating a different branch and committing it to GitHub so we can keep different versions tagged.
-sudo mkdir -r /lib/modules/5.15.136-tegra/kernel/drivers/net/can/usb
+sudo mkdir -p /lib/modules/[version]-tegra/kernel/drivers/net/can/usb
 sudo cp ${ISAAC_ROS_WS}/agx-indro-docker/docker/gs_usb.ko.<version_number> /lib/modules/5.15.136-tegra/kernel/drivers/net/can/usb/gs_usb.ko
 sudo depmod -a
 sudo modprobe gs_usb
