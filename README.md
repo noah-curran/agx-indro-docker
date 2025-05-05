@@ -3,7 +3,7 @@ First, make sure you have Isaac ROS setup with your workspace. We build the Dock
 1. [Setup docker](https://jetsonhacks.com/2025/02/24/docker-setup-on-jetpack-6-jetson-orin/).
 2. [Prepare your hardware](https://nvidia-isaac-ros.github.io/getting_started/hardware_setup/compute/index.html#jetson-platforms).
 3. [Prepare your development environment](https://nvidia-isaac-ros.github.io/getting_started/dev_env_setup.html).
-4. [Download Isaac ROS to workspace](https://nvidia-isaac-ros.github.io/getting_started/hardware_setup/sensors/realsense_setup.html). NOTE: Only follow this guide up to when `.isaac_ros_common-config` is mentioned, and then follow the guide below.
+4. [Download Isaac ROS to workspace](https://nvidia-isaac-ros.github.io/getting_started/hardware_setup/sensors/realsense_setup.html). NOTE: Only follow this guide up to when `.isaac_ros_common-config` is mentioned, and then follow the guide below. (Branch `release-3.2` commit [`e74d58e9ff951a0677c49e89edd588a36f43bbb2`](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common/commit/e74d58e9ff951a0677c49e89edd588a36f43bbb2) is known to work.)
 
 Clone this to our workspace.
 ```bash
